@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         initTabLayout();
         setTitle(R.string.app_name);
     }
-
+//
     private void initTabLayout() {
         tabLayout.addTab(tabLayout.newTab().setText("Все записи"));
         tabLayout.addTab(tabLayout.newTab().setText("Избранное"));
