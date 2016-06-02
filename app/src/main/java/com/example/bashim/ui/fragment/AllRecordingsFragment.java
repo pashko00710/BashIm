@@ -3,6 +3,7 @@ package com.example.bashim.ui.fragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
 
 import com.example.bashim.R;
 import com.example.bashim.adapter.AllRecordingsAdapter;
@@ -19,9 +20,13 @@ import java.util.List;
 public class AllRecordingsFragment extends Fragment {
     @ViewById(R.id.all_recordings_recyclerview)
     RecyclerView recyclerView;
+    @ViewById(R.id.allrecordings_item_imageview)
+    ImageView imageView;
 
     @AfterViews
     public void initExpensesRecylerView() {
+//        int color = Color.parseColor("#AE6118"); //The color u want
+//        imageView.setColorFilter(color);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         AllRecordingsAdapter recordingsAdapter = new AllRecordingsAdapter(getRecordings());
         recyclerView.setAdapter(recordingsAdapter);
