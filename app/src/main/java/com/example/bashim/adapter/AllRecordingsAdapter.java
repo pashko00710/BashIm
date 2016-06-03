@@ -7,23 +7,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.bashim.R;
-import com.example.bashim.model.MyListAllRecordings;
+import com.example.bashim.database.model.Recordings;
 
 import java.util.List;
 
 public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdapter.ViewHolder> {
 
-    private List<MyListAllRecordings> mDataset;
+    private List<Recordings> mDataset;
 
 public static class ViewHolder extends RecyclerView.ViewHolder {
-    public TextView description;
+    public TextView text;
     public ViewHolder(View v) {
         super(v);
-        description = (TextView) v.findViewById(R.id.item_textview_description);
+        text = (TextView) v.findViewById(R.id.item_textview_description);
     }
 }
 
-    public AllRecordingsAdapter(List<MyListAllRecordings> myDataset) {
+    public AllRecordingsAdapter(List<Recordings> myDataset) {
         mDataset = myDataset;
     }
 
@@ -39,7 +39,7 @@ public static class ViewHolder extends RecyclerView.ViewHolder {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.description.setText(mDataset.get(position).getName());
+        holder.text.setText(mDataset.get(position).getHtml());
     }
 
     @Override
