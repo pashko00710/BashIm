@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:id="@+id/allrecordings_item_imagebutton_favorites"
+            android:background="@null"
             android:src="@drawable/ic_star_outline_grey600_24dp" />
 
     </android.support.v7.widget.CardView>

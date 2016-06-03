@@ -1,6 +1,7 @@
 package com.example.bashim.ui.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -8,20 +9,28 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.bashim.R;
 import com.example.bashim.adapter.AllRecordingsAdapter;
 import com.example.bashim.database.model.Recordings;
+import com.example.bashim.rest.RestService;
+import com.example.bashim.rest.model.BashImModel;
 import com.example.bashim.util.ConstantManager;
+import com.example.bashim.util.NetworkStatusChecker;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.RetrofitError;
 
 @EFragment(R.layout.fragment_all_recordings)
 public class AllRecordingsFragment extends Fragment {
@@ -34,13 +43,13 @@ public class AllRecordingsFragment extends Fragment {
     int quantityRecordings = Integer.parseInt(ConstantManager.RECORDINGS_LIMIT);
 
     boolean liked = false;
+    private String name;
 
     @AfterViews
     public void initExpensesRecylerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        if(Recordings.getAllRecordings(quantityRecordings).isEmpty()) {
-            getRecordings();
-        }
+        getAllRecordingsRest(recyclerView);
+        loadRecordings();
 //        imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
     }
 
@@ -59,7 +68,6 @@ public class AllRecordingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadRecordings();
     }
 
     private void loadRecordings() {
@@ -86,10 +94,33 @@ public class AllRecordingsFragment extends Fragment {
         });
     }
 
-    private void getRecordings() {
-        Recordings recordings = new Recordings();
-        recordings.setHtml("xxx: Моя жизнь похожа на хождение слепого, " + "\n" +
-                "глухого и немного туповатого человека по полю с граблями.");
-        recordings.insert();
+    @Background
+    public void getAllRecordingsRest(View v) {
+        if (!NetworkStatusChecker.isNetworkAvailable(getContext())) {
+            Snackbar.make(v, "Internet if not found", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+        RestService restService = new RestService();
+        ArrayList<BashImModel> bashImModel;
+        try {
+            bashImModel = restService.getRecordings();
+        } catch (RetrofitError e) {
+            Snackbar.make(v, "Internet if not found", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        ArrayList<Recordings> notExists = new ArrayList<>();
+
+        for (BashImModel recording : bashImModel) {
+            Recordings recordings = new Recordings();
+            name = recording.getElementPureHtml();
+            recordings.setHtml(name);
+            if (!recordings.exists()) {
+                recordings.insert();
+//                notExists.add(recordings);
+            } else {
+                break;
+            }
+        }
     }
 }

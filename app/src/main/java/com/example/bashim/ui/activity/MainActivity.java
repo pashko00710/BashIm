@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         causeFragment(new AllRecordingsFragment_());
     }
 
-
     private void causeFragment(Fragment fragment) {
         String backStateName =  fragment.getClass().getName();
         String fragmentTag = backStateName;
