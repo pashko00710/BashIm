@@ -7,4 +7,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="main_all_recordings">All recordings</string>
     <string name="main_liked_recordings">Liked recordings</string>
+
+    <!-- TODO: MainActivity text -->
+    <string name="main_activity_all_recordings">Все записи</string>
+    <string name="main_activity_liked_recordings">Избранное</string>
 </resources>

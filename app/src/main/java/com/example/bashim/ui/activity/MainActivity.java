@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTabLayout() {
-        tabLayout.addTab(tabLayout.newTab().setText("Все записи"));
-        tabLayout.addTab(tabLayout.newTab().setText("Избранное"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_all_recordings));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_liked_recordings));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final PageAdapter adapter = new PageAdapter

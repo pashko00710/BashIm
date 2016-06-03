@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import com.example.bashim.R;
 import com.example.bashim.adapter.AllRecordingsAdapter;
 import com.example.bashim.database.model.Recordings;
+import com.example.bashim.util.ConstantManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -26,24 +27,24 @@ import java.util.List;
 public class AllRecordingsFragment extends Fragment {
     @ViewById(R.id.all_recordings_recyclerview)
     RecyclerView recyclerView;
-    @ViewById(R.id.allrecordings_item_imageview)
+    @ViewById(R.id.allrecordings_item_imagebutton_favorites)
     ImageButton imageButton;
 
     @InstanceState
-    int quantityQuotes = 7;
+    int quantityRecordings = Integer.parseInt(ConstantManager.RECORDINGS_LIMIT);
 
     boolean liked = false;
 
     @AfterViews
     public void initExpensesRecylerView() {
-//        imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        if(Recordings.getAllRecordings(quantityQuotes).isEmpty()) {
+        if(Recordings.getAllRecordings(quantityRecordings).isEmpty()) {
             getRecordings();
         }
+//        imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
     }
 
-    @Click(R.id.allrecordings_item_imageview)
+    @Click(R.id.allrecordings_item_imagebutton_favorites)
     public void likeRecord() {
         Log.d("here", "here");
         if(!liked) {
@@ -68,7 +69,7 @@ public class AllRecordingsFragment extends Fragment {
                 final AsyncTaskLoader<List<Recordings>> loader = new AsyncTaskLoader<List<Recordings>>(getActivity()) {
                     @Override
                     public List<Recordings> loadInBackground() {
-                        return Recordings.getAllRecordings(quantityQuotes);
+                        return Recordings.getAllRecordings(quantityRecordings);
                     }
                 };
                 loader.forceLoad();
