@@ -8,7 +8,6 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -22,7 +21,6 @@ import com.example.bashim.util.NetworkStatusChecker;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
@@ -42,32 +40,19 @@ public class AllRecordingsFragment extends Fragment {
     @InstanceState
     int quantityRecordings = Integer.parseInt(ConstantManager.RECORDINGS_LIMIT);
 
-    boolean liked = false;
     private String name;
 
     @AfterViews
     public void initExpensesRecylerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         getAllRecordingsRest(recyclerView);
-        loadRecordings();
-//        imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
     }
 
-    @Click(R.id.allrecordings_item_imagebutton_favorites)
-    public void likeRecord() {
-        Log.d("here", "here");
-        if(!liked) {
-            imageButton.setImageResource(R.drawable.ic_star);
-            liked = true;
-        } else {
-            imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
-            liked = false;
-        }
-    }
 
     @Override
     public void onResume() {
         super.onResume();
+        loadRecordings();
     }
 
     private void loadRecordings() {

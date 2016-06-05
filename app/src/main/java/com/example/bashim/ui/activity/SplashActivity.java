@@ -16,7 +16,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
-    @Background(id="start",delay=2500)
+    @Background(id="start",delay=3000)
     void doInBackground() {
         MainActivity_.intent(this).start();
     }

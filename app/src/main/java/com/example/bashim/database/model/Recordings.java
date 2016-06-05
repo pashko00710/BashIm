@@ -38,6 +38,15 @@ public class Recordings extends BaseModel {
                 .queryList();
     }
 
+    public static void addToFavorites(long id) {
+
+        SQLite.update(Recordings.class)
+                .set(
+                        Recordings_Table.favorites.eq(true)
+                )
+                .where(Recordings_Table.id.is(id)).query();
+    }
+
     public long getId() {
         return id;
     }
