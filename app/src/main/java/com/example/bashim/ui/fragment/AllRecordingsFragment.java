@@ -109,15 +109,12 @@ public class AllRecordingsFragment extends Fragment {
             return;
         }
 
-        ArrayList<Recordings> notExists = new ArrayList<>();
-
         for (BashImModel recording : bashImModel) {
             Recordings recordings = new Recordings();
             name = recording.getElementPureHtml();
             recordings.setHtml(name);
             if (!recordings.exists()) {
                 recordings.insert();
-//                notExists.add(recordings);
             } else {
                 break;
             }
