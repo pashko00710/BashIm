@@ -2,7 +2,6 @@ package com.example.bashim.adapter;
 
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +29,8 @@ public class LikedRecordingsAdapter extends RecyclerView.Adapter<LikedRecordings
 
         @Override
         public void onClick(View v) {
-            recordings.setId((long) v.getTag());
-            Log.d("hereeeee2", String.valueOf(recordings.getId()));
-            recordings.setFavorites(false);
-            recordings.save();
+            long position = (long) v.getTag();
+            recordings.removeFavorites(position);
         }
     }
 
@@ -55,7 +52,6 @@ public class LikedRecordingsAdapter extends RecyclerView.Adapter<LikedRecordings
     public void onBindViewHolder(ViewHolder holder, int position) {
         recordings = mDataset.get(position);
         holder.text.setText(mDataset.get(position).getHtml());
-        Log.d("hereeeee", String.valueOf(mDataset.get(position).getId()));
         holder.imageButtonRemoved.setTag(mDataset.get(position).getId());
     }
 
