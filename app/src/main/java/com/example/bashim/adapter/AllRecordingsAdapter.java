@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bashim.R;
 import com.example.bashim.database.model.Recordings;
@@ -15,6 +16,7 @@ import java.util.List;
 public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdapter.ViewHolder> {
 
     private List<Recordings> mDataset;
+    private Recordings recordings;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView text;
@@ -29,6 +31,8 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
 
         @Override
         public void onClick(View v) {
+            long position = (long) v.getTag();
+            Toast.makeText(v.getContext(),Long.toString(position),Toast.LENGTH_SHORT).show();
             if(!liked) {
                 imageButton.setImageResource(R.drawable.ic_star);
                 liked = true;
@@ -36,7 +40,12 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
                 imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
                 liked = false;
             }
-//        favoritesAdd();
+            favoritesAdd(position);
+        }
+        public void favoritesAdd(long position) {
+            recordings.setId(position);
+            recordings.setFavorites(true);
+            recordings.save();
         }
 
     }
@@ -50,6 +59,7 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
                                                    int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.all_recordings_item, parent, false);
+//        v.setOnClickListener(mOnClickListener);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -57,7 +67,10 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        recordings = mDataset.get(position);
         holder.text.setText(mDataset.get(position).getHtml());
+        holder.imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
+        holder.imageButton.setTag(mDataset.get(position).getId());
     }
 
     @Override

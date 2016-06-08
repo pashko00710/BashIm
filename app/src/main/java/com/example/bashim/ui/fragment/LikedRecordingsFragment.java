@@ -34,9 +34,10 @@ public class LikedRecordingsFragment extends Fragment {
 
     @Override
     public void onResume() {
-        super.onResume();
         loadRecordings();
+        super.onResume();
     }
+
     private void loadRecordings() {
         getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<List<Recordings>>() {
             @Override

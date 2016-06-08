@@ -36,11 +36,11 @@ public class AllRecordingsFragment extends Fragment {
     RecyclerView recyclerView;
     @ViewById(R.id.allrecordings_item_imagebutton_favorites)
     ImageButton imageButton;
-
     @InstanceState
     int quantityRecordings = Integer.parseInt(ConstantManager.RECORDINGS_LIMIT);
 
     private String name;
+    private Recordings recordings;
 
     @AfterViews
     public void initExpensesRecylerView() {
@@ -56,7 +56,7 @@ public class AllRecordingsFragment extends Fragment {
     }
 
     private void loadRecordings() {
-        getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<List<Recordings>>() {
+        getLoaderManager().restartLoader(0, null, new LoaderManager.LoaderCallbacks<List<Recordings>>() {
             @Override
             public Loader<List<Recordings>> onCreateLoader(int id, Bundle args) {
                 final AsyncTaskLoader<List<Recordings>> loader = new AsyncTaskLoader<List<Recordings>>(getActivity()) {
@@ -95,7 +95,7 @@ public class AllRecordingsFragment extends Fragment {
         }
 
         for (BashImModel recording : bashImModel) {
-            Recordings recordings = new Recordings();
+            recordings = new Recordings();
             name = recording.getElementPureHtml();
             recordings.setHtml(name);
             if (!recordings.exists()) {
