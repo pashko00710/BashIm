@@ -97,6 +97,7 @@ public class AllRecordingsFragment extends Fragment {
         for (BashImModel recording : bashImModel) {
             recordings = new Recordings();
             name = recording.getElementPureHtml();
+            recordings.setFavorites(false);
             recordings.setHtml(name);
             if (!recordings.exists()) {
                 recordings.insert();

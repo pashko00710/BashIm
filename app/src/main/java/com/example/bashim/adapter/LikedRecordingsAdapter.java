@@ -30,7 +30,10 @@ public class LikedRecordingsAdapter extends RecyclerView.Adapter<LikedRecordings
         @Override
         public void onClick(View v) {
             long position = (long) v.getTag();
-            recordings.removeFavorites(position);
+            recordings.setId(position);
+            recordings.setFavorites(false);
+            recordings.delete();
+//            recordings.removeFavorites(position);
         }
     }
 
