@@ -1,5 +1,6 @@
 package com.example.bashim.ui.activity;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -68,12 +69,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                viewPager.getAdapter().notifyDataSetChanged();
+                //Лаги здесь)) внизу одна строка
+//                viewPager.getAdapter().notifyDataSetChanged();
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                viewPager.invalidate();
+
             }
 
             @Override
@@ -89,7 +91,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 1){
-            finish();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
         else {
             super.onBackPressed();

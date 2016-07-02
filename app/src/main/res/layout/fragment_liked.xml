@@ -5,16 +5,11 @@
     android:orientation="vertical"
     tools:context=".ui.fragment.LikedRecordingsFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/favorite_swipe">
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/liked_recordings_recyclerview">
 
     </android.support.v7.widget.RecyclerView>
-</android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

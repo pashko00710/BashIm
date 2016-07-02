@@ -6,7 +6,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -28,8 +27,6 @@ public class LikedRecordingsFragment extends Fragment {
     ViewPager pager;
     @ViewById(R.id.liked_recordings_recyclerview)
     RecyclerView recyclerView;
-    @ViewById(R.id.favorite_swipe)
-    SwipeRefreshLayout mSwipeRefreshLayout;
     @InstanceState
     int quantityRecordings = Integer.parseInt(ConstantManager.RECORDINGS_LIMIT);
 
@@ -42,19 +39,6 @@ public class LikedRecordingsFragment extends Fragment {
     public void onStart() {
         loadRecordings();
         super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadRecordings();
-            }
-        });
-        mSwipeRefreshLayout.setColorSchemeResources(
-                R.color.colorAccent);
     }
 
 
@@ -73,9 +57,6 @@ public class LikedRecordingsFragment extends Fragment {
             }
             @Override
             public void onLoadFinished(Loader<List<Recordings>> loader, List<Recordings> data) {
-                if (mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
                 recyclerView.setAdapter(new LikedRecordingsAdapter(data));
             }
             @Override
