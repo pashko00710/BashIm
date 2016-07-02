@@ -24,7 +24,7 @@ public class Recordings extends BaseModel {
 
     @Unique(unique = false, uniqueGroups = 1)
     @Column
-    boolean favorites = false;
+    boolean favorites;
 
     public static List<Recordings> getAllRecordings(int count) {
 

@@ -24,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     @ViewById(R.id.pager)
     ViewPager viewPager;
+
+    PageAdapter adapter;
+
+
     @AfterViews
     public void ready() {
         setupActionBar();
@@ -53,18 +57,23 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.main_activity_liked_recordings));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final PageAdapter adapter = new PageAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
+        adapter = new PageAdapter
+                (getSupportFragmentManager(), tabLayout.getTabCount(), getApplicationContext());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                viewPager.getAdapter().notifyDataSetChanged();
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+                viewPager.invalidate();
             }
 
             @Override
@@ -86,5 +95,4 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
 }

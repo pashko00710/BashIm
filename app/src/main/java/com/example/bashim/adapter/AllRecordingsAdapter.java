@@ -1,7 +1,6 @@
 package com.example.bashim.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +68,6 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
         recordings = mDataset.get(position);
         holder.text.setText(mDataset.get(position).getHtml());
         holder.imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
-        Log.d("hereeeeeall", String.valueOf(mDataset.get(position).getId()));
         holder.imageButton.setTag(mDataset.get(position).getId());
     }
 
@@ -77,4 +75,5 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
     public int getItemCount() {
         return mDataset.size();
     }
+
 }

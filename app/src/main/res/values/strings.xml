@@ -11,4 +11,5 @@
     <!-- TODO: MainActivity text -->
     <string name="main_activity_all_recordings">Все записи</string>
     <string name="main_activity_liked_recordings">Избранное</string>
+    <string name="internet_is_not_found">Internet if not found</string>
 </resources>

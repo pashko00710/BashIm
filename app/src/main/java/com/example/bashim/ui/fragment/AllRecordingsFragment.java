@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -32,10 +34,14 @@ import retrofit.RetrofitError;
 
 @EFragment(R.layout.fragment_all_recordings)
 public class AllRecordingsFragment extends Fragment {
+    @ViewById(R.id.pager)
+    ViewPager pager;
     @ViewById(R.id.all_recordings_recyclerview)
     RecyclerView recyclerView;
     @ViewById(R.id.allrecordings_item_imagebutton_favorites)
     ImageButton imageButton;
+    @ViewById(R.id.all_swipe)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @InstanceState
     int quantityRecordings = Integer.parseInt(ConstantManager.RECORDINGS_LIMIT);
 
@@ -52,7 +58,20 @@ public class AllRecordingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadRecordings();
+            }
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.colorAccent);
+    }
+
+    @Override
+    public void onStart() {
         loadRecordings();
+        super.onStart();
     }
 
     private void loadRecordings() {
@@ -70,6 +89,9 @@ public class AllRecordingsFragment extends Fragment {
             }
             @Override
             public void onLoadFinished(Loader<List<Recordings>> loader, List<Recordings> data) {
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
                 recyclerView.setAdapter(new AllRecordingsAdapter(data));
             }
             @Override
@@ -82,7 +104,7 @@ public class AllRecordingsFragment extends Fragment {
     @Background
     public void getAllRecordingsRest(View v) {
         if (!NetworkStatusChecker.isNetworkAvailable(getContext())) {
-            Snackbar.make(v, "Internet if not found", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(v, R.string.internet_is_not_found, Snackbar.LENGTH_LONG).show();
             return;
         }
         RestService restService = new RestService();
@@ -90,7 +112,7 @@ public class AllRecordingsFragment extends Fragment {
         try {
             bashImModel = restService.getRecordings();
         } catch (RetrofitError e) {
-            Snackbar.make(v, "Internet if not found", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(v, R.string.internet_is_not_found, Snackbar.LENGTH_LONG).show();
             return;
         }
 
