@@ -1,5 +1,6 @@
 package com.example.bashim.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -12,10 +13,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.bashim.R;
 import com.example.bashim.adapter.AllRecordingsAdapter;
 import com.example.bashim.database.model.Recordings;
+import com.example.bashim.interfaces.FragmentLifecycle;
 import com.example.bashim.rest.RestService;
 import com.example.bashim.rest.model.BashImModel;
 import com.example.bashim.util.ConstantManager;
@@ -33,7 +36,7 @@ import java.util.List;
 import retrofit.RetrofitError;
 
 @EFragment(R.layout.fragment_all_recordings)
-public class AllRecordingsFragment extends Fragment {
+public class AllRecordingsFragment extends Fragment implements FragmentLifecycle {
     @ViewById(R.id.pager)
     ViewPager pager;
     @ViewById(R.id.all_recordings_recyclerview)
@@ -74,6 +77,7 @@ public class AllRecordingsFragment extends Fragment {
         super.onStart();
     }
 
+
     private void loadRecordings() {
         getLoaderManager().restartLoader(0, null, new LoaderManager.LoaderCallbacks<List<Recordings>>() {
             @Override
@@ -92,7 +96,7 @@ public class AllRecordingsFragment extends Fragment {
                 if (mSwipeRefreshLayout.isRefreshing()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
-                recyclerView.setAdapter(new AllRecordingsAdapter(data));
+                recyclerView.setAdapter(new AllRecordingsAdapter(data, getContext()));
             }
             @Override
             public void onLoaderReset(Loader<List<Recordings>> loader) {
@@ -128,4 +132,27 @@ public class AllRecordingsFragment extends Fragment {
             }
         }
     }
+
+    @Override
+    public void onPauseFragment(Context context) {
+//        setUserVisibleHint(true);
+        Toast.makeText(context, "onPauseFragment():" + "FragmentAll", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResumeFragment(Context context) {
+//        setUserVisibleHint(true);
+//        loadRecordings();
+        Toast.makeText(context, "onResumeFragment():" + "FragmentAll", Toast.LENGTH_SHORT).show();
+    }
+
+    //закомментить onStart и расскоментить setUserVisibleHint для автоматической подгрузки записей
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser) {
+//            loadRecordings();
+//        }
+//    }
+
 }

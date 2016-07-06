@@ -1,5 +1,6 @@
 package com.example.bashim.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -8,10 +9,12 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.example.bashim.R;
 import com.example.bashim.adapter.LikedRecordingsAdapter;
 import com.example.bashim.database.model.Recordings;
+import com.example.bashim.interfaces.FragmentLifecycle;
 import com.example.bashim.util.ConstantManager;
 
 import org.androidannotations.annotations.AfterViews;
@@ -22,25 +25,26 @@ import org.androidannotations.annotations.ViewById;
 import java.util.List;
 
 @EFragment(R.layout.fragment_liked)
-public class LikedRecordingsFragment extends Fragment {
+public class LikedRecordingsFragment extends Fragment implements FragmentLifecycle {
     @ViewById(R.id.pager)
     ViewPager pager;
     @ViewById(R.id.liked_recordings_recyclerview)
     RecyclerView recyclerView;
     @InstanceState
     int quantityRecordings = Integer.parseInt(ConstantManager.RECORDINGS_LIMIT);
+    boolean visible = false;
+
 
     @AfterViews
     public void ready() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    @Override
-    public void onStart() {
-        loadRecordings();
-        super.onStart();
-    }
-
+//    @Override
+//    public void onStart() {
+//        loadRecordings();
+//        super.onStart();
+//    }
 
     private void loadRecordings() {
         getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<List<Recordings>>() {
@@ -57,13 +61,38 @@ public class LikedRecordingsFragment extends Fragment {
             }
             @Override
             public void onLoadFinished(Loader<List<Recordings>> loader, List<Recordings> data) {
-                recyclerView.setAdapter(new LikedRecordingsAdapter(data));
+                recyclerView.setAdapter(new LikedRecordingsAdapter(data, getContext()));
             }
             @Override
             public void onLoaderReset(Loader<List<Recordings>> loader) {
 //                ​loader = null;
             }
         });
+    }
+
+
+
+    @Override
+    public void onPauseFragment(Context context) {
+//        loadRecordings();
+//        setUserVisibleHint(true);
+        Toast.makeText(context, "onPauseFragment():" + "FragmentLiked", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResumeFragment(Context context) {
+//        loadRecordings();
+//        setUserVisibleHint(true);
+//        Toast.makeText(context, "onResumeFragment():" + "FragmentLiked", Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            loadRecordings();
+        }
     }
 
 

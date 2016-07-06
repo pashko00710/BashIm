@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.example.bashim.R;
 import com.example.bashim.adapter.PageAdapter;
+import com.example.bashim.interfaces.FragmentLifecycle;
 import com.example.bashim.ui.fragment.AllRecordingsFragment_;
 
 import org.androidannotations.annotations.AfterViews;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
 
     PageAdapter adapter;
+    private static final String PAGER_TAG = "MainActivity.PAGER_TAG";
 
 
     @AfterViews
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         initTabLayout();
         setTitle(R.string.app_name);
         causeFragment(new AllRecordingsFragment_());
+        viewPager.setOnPageChangeListener(pageChangeListener);
     }
 
     private void causeFragment(Fragment fragment) {
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager manager = getSupportFragmentManager();
         boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
 
         if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null){ //fragment not in back stack, create it.
             FragmentTransaction ft = manager.beginTransaction();
@@ -100,4 +104,29 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+
+
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        int currentPosition = 0;
+
+        @Override
+        public void onPageSelected(int newPosition) {
+
+            FragmentLifecycle fragmentToHide = (FragmentLifecycle)adapter.getItem(currentPosition);
+            fragmentToHide.onPauseFragment(getApplicationContext());
+
+            FragmentLifecycle fragmentToShow = (FragmentLifecycle)adapter.getItem(newPosition);
+            fragmentToShow.onResumeFragment(getApplicationContext());
+
+            currentPosition = newPosition;
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) { }
+
+        public void onPageScrollStateChanged(int arg0) { }
+    };
+
 }

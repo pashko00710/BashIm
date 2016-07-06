@@ -1,9 +1,13 @@
 package com.example.bashim.adapter;
 
+import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,13 +21,17 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
 
     private List<Recordings> mDataset;
     private Recordings recordings;
+    private int lastPosition = -1;
+    Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView text;
         public ImageButton imageButton;
+        public CardView cardView;
         public boolean liked = false;
         public ViewHolder(View v) {
             super(v);
+            cardView = (CardView) v.findViewById(R.id.card_view);
             text = (TextView) v.findViewById(R.id.item_textview_description);
             imageButton = (ImageButton) v.findViewById(R.id.allrecordings_item_imagebutton_favorites);
             imageButton.setOnClickListener(this);
@@ -40,6 +48,7 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
                 imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
                 liked = false;
             }
+
             favoritesAdd(position);
         }
         public void favoritesAdd(long position) {
@@ -48,8 +57,9 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
 
     }
 
-    public AllRecordingsAdapter(List<Recordings> myDataset) {
+    public AllRecordingsAdapter(List<Recordings> myDataset, Context context) {
         mDataset = myDataset;
+        this.context = context;
     }
 
     @Override
@@ -62,13 +72,22 @@ public class AllRecordingsAdapter extends RecyclerView.Adapter<AllRecordingsAdap
         return vh;
     }
 
+    private void setAnimation(View view, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.alpha);
+            view.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+
+        @Override
+    public void onBindViewHolder (ViewHolder holder, int position) {
         recordings = mDataset.get(position);
         holder.text.setText(mDataset.get(position).getHtml());
         holder.imageButton.setImageResource(R.drawable.ic_star_outline_grey600_24dp);
         holder.imageButton.setTag(mDataset.get(position).getId());
+        setAnimation(holder.cardView, position);
     }
 
     @Override
