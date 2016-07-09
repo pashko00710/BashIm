@@ -48,16 +48,16 @@ public class Recordings extends BaseModel {
     public static void addToFavorites(long id) {
 
         SQLite.update(Recordings.class)
-                .set(
-                        Recordings_Table.favorites.eq(true)
-                )
-                .where(Recordings_Table.id.is(id)).query();
+                .set(Recordings_Table.favorites.eq(true))
+                .where(Recordings_Table.id.is(id))
+                .query();
     }
 
     public static void removeFavorites(long id) {
         SQLite.update(Recordings.class)
                 .set(Recordings_Table.favorites.eq(false))
-                .where(Recordings_Table.id.is(id)).query();
+                .where(Recordings_Table.id.is(id))
+                .query();
     }
 
     public long getId() {

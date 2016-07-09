@@ -43,11 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private void causeFragment(Fragment fragment) {
         String backStateName =  fragment.getClass().getName();
         String fragmentTag = backStateName;
-
         FragmentManager manager = getSupportFragmentManager();
         boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
-
-
         if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null){ //fragment not in back stack, create it.
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.pager, fragment, fragmentTag);

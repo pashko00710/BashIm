@@ -60,6 +60,7 @@ public class AllRecordingsFragment extends Fragment implements FragmentLifecycle
 
     @Override
     public void onResume() {
+//        loadRecordings();
         super.onResume();
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -147,12 +148,12 @@ public class AllRecordingsFragment extends Fragment implements FragmentLifecycle
     }
 
     //закомментить onStart и расскоментить setUserVisibleHint для автоматической подгрузки записей
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        if (isVisibleToUser) {
-//            loadRecordings();
-//        }
-//    }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            loadRecordings();
+        }
+    }
 
 }

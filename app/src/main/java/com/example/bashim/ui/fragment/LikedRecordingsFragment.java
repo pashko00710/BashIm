@@ -15,6 +15,7 @@ import com.example.bashim.R;
 import com.example.bashim.adapter.LikedRecordingsAdapter;
 import com.example.bashim.database.model.Recordings;
 import com.example.bashim.interfaces.FragmentLifecycle;
+import com.example.bashim.interfaces.ItemCLick;
 import com.example.bashim.util.ConstantManager;
 
 import org.androidannotations.annotations.AfterViews;
@@ -33,18 +34,13 @@ public class LikedRecordingsFragment extends Fragment implements FragmentLifecyc
     @InstanceState
     int quantityRecordings = Integer.parseInt(ConstantManager.RECORDINGS_LIMIT);
     boolean visible = false;
+    LikedRecordingsAdapter likedRecordingsAdapter;
 
 
     @AfterViews
     public void ready() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
-
-//    @Override
-//    public void onStart() {
-//        loadRecordings();
-//        super.onStart();
-//    }
 
     private void loadRecordings() {
         getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<List<Recordings>>() {
@@ -61,7 +57,19 @@ public class LikedRecordingsFragment extends Fragment implements FragmentLifecyc
             }
             @Override
             public void onLoadFinished(Loader<List<Recordings>> loader, List<Recordings> data) {
-                recyclerView.setAdapter(new LikedRecordingsAdapter(data, getContext()));
+                LikedRecordingsAdapter adapter = (LikedRecordingsAdapter) recyclerView.getAdapter();
+                if(adapter == null) {
+                    likedRecordingsAdapter = new LikedRecordingsAdapter(data, getContext(), new ItemCLick() {
+                        @Override
+                        public void onItemClick(int position) {
+                            likedRecordingsAdapter.removeItem(position);
+                        }
+
+                    });
+                    recyclerView.setAdapter(likedRecordingsAdapter);
+                } else {
+                    adapter.refresh(data);
+                }
             }
             @Override
             public void onLoaderReset(Loader<List<Recordings>> loader) {
@@ -83,7 +91,7 @@ public class LikedRecordingsFragment extends Fragment implements FragmentLifecyc
     public void onResumeFragment(Context context) {
 //        loadRecordings();
 //        setUserVisibleHint(true);
-//        Toast.makeText(context, "onResumeFragment():" + "FragmentLiked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "onResumeFragment():" + "FragmentLiked", Toast.LENGTH_SHORT).show();
     }
 
 
